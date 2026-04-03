@@ -7,19 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// model User {
-//   id           String   @id @default(cuid())
-//   email        String   @unique
-//   name         String
-//   passwordHash String
-//   createdAt    DateTime @default(now())
-//   updatedAt    DateTime @updatedAt
-
-//   tasks         Task[]
-//   refreshTokens RefreshToken[]
-
-//   @@map("users")
-// }
+// users can have many tasks
 
 model User {
   id           String   @id @default(cuid())
