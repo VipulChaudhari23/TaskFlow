@@ -1,17 +1,25 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { AuthProvider, useAuth } from '@/context/AuthContext';
+import { ProfileProvider, useProfile } from '@/context/ProfileContext';
 import { Loader2 } from 'lucide-react';
 
 function Guard({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
+  const { activeProfile } = useProfile();
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
-    if (!loading && !user) router.replace('/login');
-  }, [user, loading, router]);
+    if (loading) return;
+    if (!user) { router.replace('/login'); return; }
+    // If logged in but no profile selected, go to profile picker (unless already there)
+    if (user && !activeProfile && pathname !== '/profiles') {
+      router.replace('/profiles');
+    }
+  }, [user, loading, activeProfile, pathname, router]);
 
   if (loading) {
     return (
@@ -27,7 +35,9 @@ function Guard({ children }: { children: React.ReactNode }) {
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <AuthProvider>
-      <Guard>{children}</Guard>
+      <ProfileProvider>
+        <Guard>{children}</Guard>
+      </ProfileProvider>
     </AuthProvider>
   );
 }

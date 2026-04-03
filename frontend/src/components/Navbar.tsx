@@ -34,15 +34,17 @@ export default function Navbar() {
           >
             <CheckSquare size={14} color="white" />
           </div>
-          <span
-            className="font-bold text-base"
-            style={{
-              color: "var(--text-primary)",
-              fontFamily: "var(--font-display)",
-            }}
-          >
-            TaskFlow
-          </span>
+          <Link href="/dashboard">
+            <span
+              className="font-bold text-base"
+              style={{
+                color: "var(--text-primary)",
+                fontFamily: "var(--font-display)",
+              }}
+            >
+              TaskFlow
+            </span>
+          </Link>
         </div>
 
         <div className="flex items-center gap-3">

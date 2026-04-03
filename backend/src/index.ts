@@ -8,6 +8,8 @@ import authRouter from './routes/auth.routes';
 import taskRouter from './routes/task.routes';
 import { errorHandler } from './middleware/error.middleware';
 import teamRouter from './routes/team.routes';
+import profileRouter from './routes/profile.routes';
+
 
 dotenv.config();
 
@@ -27,6 +29,7 @@ app.use('/team', teamRouter);
 // Routes
 app.use('/auth', authRouter);
 app.use('/tasks', taskRouter);
+app.use('/profiles', profileRouter);
 
 // Health check
 app.get('/health', (_req, res) => {

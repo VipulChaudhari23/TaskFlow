@@ -7,8 +7,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// users can have many tasks
-
 model User {
   id           String   @id @default(cuid())
   email        String   @unique
@@ -17,12 +15,27 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  tasks          Task[]
+  // tasks          Task[]
+  profiles       Profile[]
   refreshTokens  RefreshToken[]
   accessGranted  TeamAccess[]   @relation("AccessOwner")
   accessReceived TeamAccess[]   @relation("AccessViewer")
 
   @@map("users")
+}
+
+model Profile {
+  id        String   @id @default(cuid())
+  name      String
+  avatarColor String  @default("#6366f1")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tasks  Task[]
+
+  @@map("profiles")
 }
 
 model Task {
@@ -35,8 +48,10 @@ model Task {
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
-  userId String
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  // userId String
+  // user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  profileId String
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   @@map("tasks")
 }
@@ -55,11 +70,11 @@ model RefreshToken {
 
 model TeamAccess {
   id        String   @id @default(cuid())
-  ownerId   String // person granting access (you)
-  viewerId  String // person receiving access (manager)
+  ownerId   String
+  viewerId  String
   createdAt DateTime @default(now())
 
-  owner  User @relation("AccessOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  owner  User @relation("AccessOwner",  fields: [ownerId],  references: [id], onDelete: Cascade)
   viewer User @relation("AccessViewer", fields: [viewerId], references: [id], onDelete: Cascade)
 
   @@unique([ownerId, viewerId])

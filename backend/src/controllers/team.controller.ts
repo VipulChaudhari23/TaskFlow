@@ -108,11 +108,40 @@ export const myOwners = async (
 };
 
 // Get tasks of a specific user (only if they granted me access)
-export const getMemberTasks = async (
-  req: AuthRequest,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
+// export const getMemberTasks = async (
+//   req: AuthRequest,
+//   res: Response,
+//   next: NextFunction
+// ): Promise<void> => {
+//   try {
+//     const viewerId = req.user!.userId;
+//     const { memberId } = req.params;
+
+//     const access = await prisma.teamAccess.findUnique({
+//       where: { ownerId_viewerId: { ownerId: memberId, viewerId } },
+//     });
+//     if (!access) {
+//       res.status(403).json({ message: "Access not granted" });
+//       return;
+//     }
+
+//     const tasks = await prisma.task.findMany({
+//       where: { userId: memberId },
+//       orderBy: { createdAt: "desc" },
+//     });
+
+//     const member = await prisma.user.findUnique({
+//       where: { id: memberId },
+//       select: { id: true, name: true, email: true },
+//     });
+
+//     res.json({ member, tasks });
+//   } catch (err) {
+//     next(err);
+//   }
+// };
+// Replace getMemberTasks with this:
+export const getMemberTasks = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     const viewerId = req.user!.userId;
     const { memberId } = req.params;
@@ -120,23 +149,22 @@ export const getMemberTasks = async (
     const access = await prisma.teamAccess.findUnique({
       where: { ownerId_viewerId: { ownerId: memberId, viewerId } },
     });
-    if (!access) {
-      res.status(403).json({ message: "Access not granted" });
-      return;
-    }
-
-    const tasks = await prisma.task.findMany({
-      where: { userId: memberId },
-      orderBy: { createdAt: "desc" },
-    });
+    if (!access) { res.status(403).json({ message: 'Access not granted' }); return; }
 
     const member = await prisma.user.findUnique({
       where: { id: memberId },
       select: { id: true, name: true, email: true },
     });
 
-    res.json({ member, tasks });
-  } catch (err) {
-    next(err);
-  }
+    // Get all profiles with their tasks
+    const profiles = await prisma.profile.findMany({
+      where: { userId: memberId },
+      include: {
+        tasks: { orderBy: { createdAt: 'desc' } },
+      },
+      orderBy: { createdAt: 'asc' },
+    });
+
+    res.json({ member, profiles });
+  } catch (err) { next(err); }
 };
