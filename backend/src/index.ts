@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 import authRouter from './routes/auth.routes';
 import taskRouter from './routes/task.routes';
 import { errorHandler } from './middleware/error.middleware';
+import teamRouter from './routes/team.routes';
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan('dev'));
+app.use('/team', teamRouter);
 
 // Routes
 app.use('/auth', authRouter);

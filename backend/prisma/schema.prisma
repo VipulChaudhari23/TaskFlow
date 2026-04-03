@@ -7,6 +7,20 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// model User {
+//   id           String   @id @default(cuid())
+//   email        String   @unique
+//   name         String
+//   passwordHash String
+//   createdAt    DateTime @default(now())
+//   updatedAt    DateTime @updatedAt
+
+//   tasks         Task[]
+//   refreshTokens RefreshToken[]
+
+//   @@map("users")
+// }
+
 model User {
   id           String   @id @default(cuid())
   email        String   @unique
@@ -15,8 +29,10 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  tasks         Task[]
-  refreshTokens RefreshToken[]
+  tasks          Task[]
+  refreshTokens  RefreshToken[]
+  accessGranted  TeamAccess[]   @relation("AccessOwner")
+  accessReceived TeamAccess[]   @relation("AccessViewer")
 
   @@map("users")
 }
@@ -50,10 +66,10 @@ model RefreshToken {
 }
 
 model TeamAccess {
-  id          String   @id @default(cuid())
-  ownerId     String   // person granting access (you)
-  viewerId    String   // person receiving access (manager)
-  createdAt   DateTime @default(now())
+  id        String   @id @default(cuid())
+  ownerId   String // person granting access (you)
+  viewerId  String // person receiving access (manager)
+  createdAt DateTime @default(now())
 
   owner  User @relation("AccessOwner", fields: [ownerId], references: [id], onDelete: Cascade)
   viewer User @relation("AccessViewer", fields: [viewerId], references: [id], onDelete: Cascade)

@@ -52,20 +52,6 @@ export default function DashboardPage() {
 
   const [searchInput, setSearchInput] = useState("");
 
-  // const fetchTasks = useCallback(async () => {
-  //   setLoading(true);
-  //   try {
-  //     const res = await taskService.getAll(filters);
-  //     setTasks(res.tasks);
-  //     setTotalPages(res.pagination.totalPages);
-  //     setTotal(res.pagination.total);
-  //   } catch {
-  //     toast.error('Failed to load tasks');
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }, [filters]);
-
   const fetchTasks = useCallback(async () => {
     setLoading(true);
     try {
@@ -160,10 +146,6 @@ export default function DashboardPage() {
     setModalOpen(true);
   };
 
-  // Stats
-  // const pending = tasks.filter((t) => t.status === 'PENDING').length;
-  // const inProgress = tasks.filter((t) => t.status === 'IN_PROGRESS').length;
-  // const completed = tasks.filter((t) => t.status === 'COMPLETED').length;
   const [stats, setStats] = useState({
     pending: 0,
     inProgress: 0,
