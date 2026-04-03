@@ -222,13 +222,16 @@ export default function DashboardPage() {
             <div
               key={s.label}
               className="card p-4 text-center cursor-pointer transition-all duration-150"
-              style={{ background: s.bg, border:
+              style={{
+                background: s.bg,
+                border:
                   filters.status ===
                   (s.label === "In Progress"
                     ? "IN_PROGRESS"
                     : s.label.toUpperCase())
                     ? "2px solid #38bdf8" // light blue border
-                    : "2px solid transparent", }}
+                    : "2px solid transparent",
+              }}
               onClick={() => {
                 const statusMap: Record<string, string> = {
                   Pending: "PENDING",

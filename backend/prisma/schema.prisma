@@ -48,3 +48,16 @@ model RefreshToken {
 
   @@map("refresh_tokens")
 }
+
+model TeamAccess {
+  id          String   @id @default(cuid())
+  ownerId     String   // person granting access (you)
+  viewerId    String   // person receiving access (manager)
+  createdAt   DateTime @default(now())
+
+  owner  User @relation("AccessOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  viewer User @relation("AccessViewer", fields: [viewerId], references: [id], onDelete: Cascade)
+
+  @@unique([ownerId, viewerId])
+  @@map("team_access")
+}
