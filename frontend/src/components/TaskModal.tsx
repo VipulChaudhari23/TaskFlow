@@ -10,6 +10,8 @@ interface TaskModalProps {
   task?: Task | null;
   onClose: () => void;
   onSaved: (task: Task) => void;
+  profileId: string;
+  defaultDueDate?: string;
 }
 
 const STATUS_OPTS: { value: TaskStatus; label: string }[] = [
@@ -24,16 +26,20 @@ const PRIORITY_OPTS: { value: Priority; label: string }[] = [
   { value: 'HIGH', label: 'High' },
 ];
 
-export default function TaskModal({ task, onClose, onSaved }: TaskModalProps) {
+export default function TaskModal({ task, onClose, onSaved, profileId, defaultDueDate }: TaskModalProps) {
   const isEdit = !!task;
   const [title, setTitle] = useState(task?.title || '');
   const [description, setDescription] = useState(task?.description || '');
   const [status, setStatus] = useState<TaskStatus>(task?.status || 'PENDING');
   const [priority, setPriority] = useState<Priority>(task?.priority || 'MEDIUM');
+  // const [dueDate, setDueDate] = useState(
+  //   task?.dueDate ? task.dueDate.split('T')[0] : ''
+  // );
   const [dueDate, setDueDate] = useState(
-    task?.dueDate ? task.dueDate.split('T')[0] : ''
-  );
+  task?.dueDate ? task.dueDate.split('T')[0] : (defaultDueDate || '')
+);
   const [loading, setLoading] = useState(false);
+  
 
   // Close on Escape
   useEffect(() => {
@@ -53,6 +59,7 @@ export default function TaskModal({ task, onClose, onSaved }: TaskModalProps) {
         status,
         priority,
         dueDate: dueDate || null,
+        profileId: profileId,
       };
       const saved = isEdit
         ? await taskService.update(task!.id, payload)

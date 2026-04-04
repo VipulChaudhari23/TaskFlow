@@ -1,6 +1,15 @@
 export type TaskStatus = 'PENDING' | 'IN_PROGRESS' | 'COMPLETED';
 export type Priority = 'LOW' | 'MEDIUM' | 'HIGH';
 
+export interface Profile {
+  id: string;
+  name: string;
+  avatarColor: string;
+  userId: string;
+  createdAt: string;
+  _count?: { tasks: number };
+}
+
 export interface Task {
   id: string;
   title: string;
@@ -10,7 +19,8 @@ export interface Task {
   dueDate?: string | null;
   createdAt: string;
   updatedAt: string;
-  userId: string;
+  // userId: string;
+  profileId: string;
 }
 
 export interface Pagination {
@@ -31,4 +41,5 @@ export interface TaskFilters {
   status?: TaskStatus | '';
   priority?: Priority | '';
   search?: string;
+  profileId?: string;
 }

@@ -9,6 +9,7 @@ export const taskService = {
     if (filters.status) params.set('status', filters.status);
     if (filters.priority) params.set('priority', filters.priority);
     if (filters.search) params.set('search', filters.search);
+    if (filters.profileId) params.set('profileId', filters.profileId);
     const { data } = await api.get(`/tasks?${params.toString()}`);
     return data;
   },
