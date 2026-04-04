@@ -37,6 +37,7 @@ import {
   ChevronDown,
   UserCircle2,
 } from "lucide-react";
+import Footer from '@/components/Footer';
 
 type ViewMode = "list" | "kanban" | "calendar";
 
@@ -915,7 +916,7 @@ export default function DashboardPage() {
                       No tasks due
                     </p>
                     <button
-                      onClick={() => setModalOpen(true)}
+                      onClick={() => { setEditingTask(null); setModalOpen(true); }}
                       className="btn-primary mt-3 text-xs gap-1.5 py-2 px-3"
                     >
                       <Plus size={13} /> Add task
@@ -1065,6 +1066,7 @@ export default function DashboardPage() {
           }
         />
       )}
+    {/* <Footer /> */}
     </>
   );
 }

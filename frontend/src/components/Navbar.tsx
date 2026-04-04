@@ -7,6 +7,7 @@ import { LogOut, CheckSquare } from "lucide-react";
 import Link from "next/link";
 import { Users } from "lucide-react";
 import { Settings } from "lucide-react";
+import { BarChart2 } from "lucide-react";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -64,6 +65,10 @@ export default function Navbar() {
           <Link href="/settings" className="btn-ghost py-1.5 px-3 text-xs">
             <Settings size={14} />
             <span className="hidden sm:inline">Settings</span>
+          </Link>
+          <Link href="/analytics" className="btn-ghost py-1.5 px-3 text-xs">
+            <BarChart2 size={14} />
+            <span className="hidden sm:inline">Analytics</span>
           </Link>
           <button
             onClick={handleLogout}

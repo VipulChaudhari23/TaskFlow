@@ -11,7 +11,7 @@ import teamRouter from './routes/team.routes';
 import profileRouter from './routes/profile.routes';
 import settingsRouter from './routes/settings.routes';
 import { startScheduler } from './lib/scheduler';
-
+import aiRouter from './routes/ai.routes';
 
 dotenv.config();
 
@@ -33,6 +33,7 @@ app.use('/auth', authRouter);
 app.use('/tasks', taskRouter);
 app.use('/profiles', profileRouter);
 app.use('/settings', settingsRouter);
+app.use('/ai', aiRouter);
 
 // Health check
 app.get('/health', (_req, res) => {
