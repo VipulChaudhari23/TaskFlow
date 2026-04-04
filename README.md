@@ -339,4 +339,4 @@ MIT License — free for personal and commercial use.
 
 ---
 
-*Built with ❤️ for NRSC and teams who deserve better than Excel reports.*
+*Built with ❤️ for teams who deserve better than Excel reports.*

@@ -252,7 +252,7 @@ export default function TeamPage() {
             <input
               type="email"
               className="input flex-1"
-              placeholder="manager@nrsc.gov.in"
+              placeholder="manager@gmail.com/ organization.com"
               value={inviteEmail}
               onChange={(e) => setInviteEmail(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleInvite()}
