@@ -6,6 +6,7 @@ import { useAuth } from "@/context/AuthContext";
 import { LogOut, CheckSquare } from "lucide-react";
 import Link from "next/link";
 import { Users } from "lucide-react";
+import { Settings } from "lucide-react";
 
 export default function Navbar() {
   const { user, logout } = useAuth();
@@ -59,6 +60,10 @@ export default function Navbar() {
           <Link href="/team" className="btn-ghost py-1.5 px-3 text-xs">
             <Users size={14} />
             <span className="hidden sm:inline">Team</span>
+          </Link>
+          <Link href="/settings" className="btn-ghost py-1.5 px-3 text-xs">
+            <Settings size={14} />
+            <span className="hidden sm:inline">Settings</span>
           </Link>
           <button
             onClick={handleLogout}

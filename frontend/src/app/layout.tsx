@@ -5,6 +5,9 @@ import { Toaster } from 'react-hot-toast';
 export const metadata: Metadata = {
   title: 'TaskFlow — Task Management',
   description: 'A modern task management system',
+  icons: {
+    icon: '/icon.svg', // or '/favicon.png'
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

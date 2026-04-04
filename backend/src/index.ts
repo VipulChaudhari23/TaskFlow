@@ -9,6 +9,8 @@ import taskRouter from './routes/task.routes';
 import { errorHandler } from './middleware/error.middleware';
 import teamRouter from './routes/team.routes';
 import profileRouter from './routes/profile.routes';
+import settingsRouter from './routes/settings.routes';
+import { startScheduler } from './lib/scheduler';
 
 
 dotenv.config();
@@ -30,6 +32,7 @@ app.use('/team', teamRouter);
 app.use('/auth', authRouter);
 app.use('/tasks', taskRouter);
 app.use('/profiles', profileRouter);
+app.use('/settings', settingsRouter);
 
 // Health check
 app.get('/health', (_req, res) => {
@@ -38,6 +41,9 @@ app.get('/health', (_req, res) => {
 
 // Error handler (must be last)
 app.use(errorHandler);
+
+// Start cron scheduler
+startScheduler();
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
