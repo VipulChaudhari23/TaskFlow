@@ -11,6 +11,7 @@ import {
   ChevronRight, Loader2, FileSpreadsheet,
   AlertTriangle, CheckCircle2, Eye, EyeOff,
 } from 'lucide-react';
+import Footer from '@/components/Footer';
 
 interface Settings {
   id: string;
@@ -312,7 +313,9 @@ export default function SettingsPage() {
           </div>
         </div>
       )}
+    <Footer />
     </>
+    
   );
 }
 

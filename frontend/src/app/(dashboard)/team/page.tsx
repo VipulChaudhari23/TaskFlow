@@ -18,6 +18,7 @@ import {
   Loader2,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
 
 interface Member {
   id: string;
@@ -784,6 +785,7 @@ export default function TeamPage() {
           )}
         </div>
       </main>
+      <Footer />
     </>
   );
 }
