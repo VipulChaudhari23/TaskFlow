@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc",
-    "build:prod": "cp prisma/schema.production.prisma prisma/schema.prisma && npx prisma generate && npx prisma db push && tsc",
+    "build:prod": "tsc",
     "start": "node dist/index.js",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
@@ -25,9 +25,7 @@
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "node-cron": "^4.2.1",
-    "nodemailer": "^8.0.4"
-  },
-  "devDependencies": {
+    "nodemailer": "^8.0.4",
     "@types/bcryptjs": "^2.4.6",
     "@types/cookie-parser": "^1.4.6",
     "@types/cors": "^2.8.17",
