@@ -4,7 +4,7 @@
 
 ---
 
-## ✨ Feature Overview
+## ✨ Feature Overview.
 
 ### 🔐 Authentication & Security
 - JWT Access Token (15 min) + Refresh Token (7 days via HttpOnly cookie)
