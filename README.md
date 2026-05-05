@@ -339,4 +339,23 @@ MIT License — free for personal and commercial use.
 
 ---
 
+DATABASE_URL="file:./dev.db"
+JWT_ACCESS_SECRET="your-super-secret-access-token-key-change-in-production"
+JWT_REFRESH_SECRET="your-super-secret-refresh-token-key-change-in-production"
+JWT_ACCESS_EXPIRES_IN="15m"
+JWT_REFRESH_EXPIRES_IN="7d"
+PORT=4000
+FRONTEND_URL="http://localhost:3000"
+NODE_ENV="development"
+
+# mail config
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USER=ttaskfflow@gmail.com
+MAIL_PASS=ofuzqmqtdpblwlys
+MAIL_FROM="TaskFlow <ttaskfflow@gmail.com>"
+
+// GROQ API
+GROQ_API_KEY=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
+
 *Built with ❤️ for teams who deserve better than Excel reports.*
