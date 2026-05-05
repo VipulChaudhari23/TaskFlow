@@ -12,6 +12,7 @@ import profileRouter from './routes/profile.routes';
 import settingsRouter from './routes/settings.routes';
 import { startScheduler } from './lib/scheduler';
 import aiRouter from './routes/ai.routes';
+import commentRouter from './routes/comment.routes';
 
 dotenv.config();
 
@@ -34,6 +35,7 @@ app.use('/tasks', taskRouter);
 app.use('/profiles', profileRouter);
 app.use('/settings', settingsRouter);
 app.use('/ai', aiRouter);
+app.use('/comments', commentRouter);
 
 // Health check
 app.get('/health', (_req, res) => {

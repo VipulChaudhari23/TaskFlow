@@ -7,6 +7,7 @@ import {
   updateTask,
   deleteTask,
   toggleTask,
+  getHistory,
 } from '../controllers/task.controller';
 import { authenticate } from '../middleware/auth.middleware';
 import { validate } from '../middleware/validate.middleware';
@@ -17,6 +18,8 @@ router.use(authenticate);
 
 router.get('/', getTasks);
 
+router.get('/history/:taskId', getHistory);
+router.get('/:id', getTask);
 router.post(
   '/',
   [
@@ -29,13 +32,16 @@ router.post(
       .optional()
       .isIn(['LOW', 'MEDIUM', 'HIGH'])
       .withMessage('Invalid priority'),
+      body('progress')
+      .optional()
+      .isInt({ min: 0, max: 100 })
+      .withMessage('Progress must be between 0 and 100'),
     body('dueDate').optional().isISO8601().withMessage('Invalid date format'),
   ],
   validate,
   createTask
 );
 
-router.get('/:id', getTask);
 
 router.patch(
   '/:id',
@@ -49,6 +55,10 @@ router.patch(
       .optional()
       .isIn(['LOW', 'MEDIUM', 'HIGH'])
       .withMessage('Invalid priority'),
+      body('progress')
+      .optional()
+      .isInt({ min: 0, max: 100 })
+      .withMessage('Progress must be between 0 and 100'),
     body('dueDate').optional({ nullable: true }).isISO8601().withMessage('Invalid date format'),
   ],
   validate,

@@ -16,11 +16,20 @@ export interface Task {
   description?: string | null;
   status: TaskStatus;
   priority: Priority;
+  progress: number; // ✅ NEW
   dueDate?: string | null;
   createdAt: string;
   updatedAt: string;
   // userId: string;
   profileId: string;
+}
+
+export interface TaskComment {
+  id: string;
+  message: string;
+  status: TaskStatus;
+  createdAt: string;
+  taskId: string;
 }
 
 export interface Pagination {
@@ -42,4 +51,11 @@ export interface TaskFilters {
   priority?: Priority | '';
   search?: string;
   profileId?: string;
+}
+
+export interface TaskHistory {
+  id: string;
+  action: string;
+  changes: string; // JSON string
+  createdAt: string;
 }

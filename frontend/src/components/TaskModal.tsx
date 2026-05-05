@@ -42,11 +42,12 @@ export default function TaskModal({
     task?.priority || "MEDIUM",
   );
   const [dueDate, setDueDate] = useState(
-    task?.dueDate ? task.dueDate.split("T")[0] : (defaultDueDate || ""),
+    task?.dueDate ? task.dueDate.split("T")[0] : defaultDueDate || "",
   );
   const [loading, setLoading] = useState(false);
   const [improving, setImproving] = useState(false);
   const [aiApplied, setAiApplied] = useState(false);
+  const [progress, setProgress] = useState(task?.progress ?? 0);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -99,6 +100,7 @@ export default function TaskModal({
         description: description.trim() || undefined,
         status,
         priority,
+        progress, // ✅ ADD THIS
         dueDate: dueDate || null,
         profileId,
       };
@@ -254,6 +256,17 @@ export default function TaskModal({
                   </option>
                 ))}
               </select>
+            </div>
+            <div>
+              <label className="label">Progress ({progress}%)</label>
+              <input
+                type="range"
+                min={0}
+                max={100}
+                value={progress}
+                onChange={(e) => setProgress(Number(e.target.value))}
+                className="w-full"
+              />
             </div>
           </div>
 

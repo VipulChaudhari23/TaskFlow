@@ -22,6 +22,9 @@ model User {
   accessGranted  TeamAccess[]   @relation("AccessOwner")
   accessReceived TeamAccess[]   @relation("AccessViewer")
 
+  taskComments TaskComment[]
+  taskHistory  TaskHistory[]
+
   @@map("users")
 }
 
@@ -45,6 +48,7 @@ model Task {
   description String?
   status      String    @default("PENDING")
   priority    String    @default("MEDIUM")
+  progress    Int       @default(0) // ✅ NEW
   dueDate     DateTime?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -53,6 +57,9 @@ model Task {
   // user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   profileId String
   profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  comments TaskComment[]
+  history  TaskHistory[]
 
   @@map("tasks")
 }
@@ -80,4 +87,34 @@ model TeamAccess {
 
   @@unique([ownerId, viewerId])
   @@map("team_access")
+}
+
+model TaskComment {
+  id        String   @id @default(cuid())
+  message   String
+  status    String   @default("PENDING")
+  createdAt DateTime @default(now())
+
+  taskId String
+  task   Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("task_comments")
+}
+
+model TaskHistory {
+  id        String   @id @default(cuid())
+  action    String
+  changes   String
+  createdAt DateTime @default(now())
+
+  taskId String
+  task   Task   @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("task_history")
 }
