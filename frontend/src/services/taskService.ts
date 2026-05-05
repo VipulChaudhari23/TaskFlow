@@ -52,6 +52,11 @@ export const taskService = {
     return data;
   },
 
+  updateComment: async (id: string, status: string) => {
+    const { data } = await api.patch(`/comments/${id}`, { status });
+    return data;
+  },
+
   getHistory: async (taskId: string) => {
     const { data } = await api.get(`/tasks/history/${taskId}`);
     return data;

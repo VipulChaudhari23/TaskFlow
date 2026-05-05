@@ -48,6 +48,9 @@ export default function TaskCard({
   const [comments, setComments] = useState<any[]>([]);
   const [newComment, setNewComment] = useState("");
   const [history, setHistory] = useState<any[]>([]);
+  const [commentStatus, setCommentStatus] = useState(task.status);
+  const [showComments, setShowComments] = useState(true);
+  const [showHistory, setShowHistory] = useState(false);
   const loadComments = async () => {
     const data = await taskService.getComments(task.id);
     setComments(data);
@@ -223,111 +226,195 @@ export default function TaskCard({
 
           {expanded && (
             <div className="mt-3">
-              <div className="space-y-1 mb-2">
-                {comments.map((c) => (
-                  <div
-                    key={c.id}
-                    className="text-xs p-2 rounded-md bg-black/20"
-                  >
-                    <div>{c.message}</div>
-                    <div className="text-[10px] opacity-60">
-                      {c.status} •{" "}
-                      {format(new Date(c.createdAt), "MMM d, HH:mm")}
-                    </div>
-                  </div>
-                ))}
-              </div>
+              {/* 🔽 COMMENTS ACCORDION HEADER */}
+              <button
+                onClick={() => setShowComments(!showComments)}
+                className="flex items-center justify-between w-full text-xs font-semibold mb-2"
+                style={{ color: "var(--text-primary)" }}
+              >
+                <span>💬 Comments</span>
+                {showComments ? (
+                  <ChevronUp size={12} />
+                ) : (
+                  <ChevronDown size={12} />
+                )}
+              </button>
 
-              <div className="flex gap-2">
-                <input
-                  className="input text-xs"
-                  placeholder="Add update..."
-                  value={newComment}
-                  onChange={(e) => setNewComment(e.target.value)}
-                />
-                <button
-                  className="btn-primary text-xs px-2"
-                  onClick={async () => {
-                    if (!newComment.trim()) return;
-                    await taskService.addComment({
-                      taskId: task.id,
-                      message: newComment,
-                      status: task.status,
-                    });
-                    setNewComment("");
-                    loadComments();
-                  }}
-                >
-                  Add
-                </button>
-              </div>
+              {/* 🔽 COMMENTS BODY */}
+              {showComments && (
+                <>
+                  <div className="space-y-1 mb-2">
+                    {comments.map((c) => (
+                      <div
+                        key={c.id}
+                        className="text-xs p-2 rounded-md bg-black/20"
+                      >
+                        <div className="flex justify-between items-center">
+                          <div>{c.message}</div>
+
+                          <select
+                            value={c.status}
+                            onChange={async (e) => {
+                              const newStatus = e.target.value;
+                              await taskService.updateComment(c.id, newStatus);
+                              loadComments();
+                              loadHistory();
+                            }}
+                            className="text-[10px] bg-transparent border rounded px-1 py-0.5"
+                          >
+                            <option value="PENDING">Pending</option>
+                            <option value="IN_PROGRESS">In Progress</option>
+                            <option value="COMPLETED">Completed</option>
+                          </select>
+                        </div>
+
+                        <div className="text-[10px] opacity-60">
+                          {c.status} •{" "}
+                          {format(new Date(c.createdAt), "MMM d, HH:mm")}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Add comment input */}
+                  <div className="flex gap-2 items-center">
+                    <input
+                      className="input text-xs flex-1"
+                      placeholder="Add update..."
+                      value={newComment}
+                      onChange={(e) => setNewComment(e.target.value)}
+                    />
+
+                    <select
+                      value={commentStatus}
+                      onChange={(e) =>
+                        setCommentStatus(
+                          e.target.value as
+                            | "PENDING"
+                            | "IN_PROGRESS"
+                            | "COMPLETED",
+                        )
+                      }
+                      className="input text-xs w-28"
+                    >
+                      <option value="PENDING">Pending</option>
+                      <option value="IN_PROGRESS">In Progress</option>
+                      <option value="COMPLETED">Completed</option>
+                    </select>
+
+                    <button
+                      className="btn-primary text-xs px-2"
+                      onClick={async () => {
+                        if (!newComment.trim()) return;
+                        await taskService.addComment({
+                          taskId: task.id,
+                          message: newComment,
+                          status: commentStatus,
+                        });
+                        setNewComment("");
+                        loadComments();
+                      }}
+                    >
+                      Add
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           )}
 
+          
+
           {expanded && history.length > 0 && (
             <div className="mt-4">
-              <h4
-                className="text-xs font-semibold mb-2"
-                style={{ color: "var(--text-muted)" }}
+              {/* 🔽 HISTORY HEADER */}
+              <button
+                onClick={() => setShowHistory(!showHistory)}
+                className="flex items-center justify-between w-full text-xs font-semibold mb-2"
+                style={{ color: "var(--text-primary)" }}
               >
-                Activity
-              </h4>
+                <span>📜 Activity</span>
+                {showHistory ? (
+                  <ChevronUp size={12} />
+                ) : (
+                  <ChevronDown size={12} />
+                )}
+              </button>
 
-              <div
-                className="space-y-2 border-l pl-3"
-                style={{ borderColor: "rgba(255,255,255,0.08)" }}
-              >
-                {history.map((h) => {
-                  const changes = JSON.parse(h.changes || "{}");
+              {/* 🔽 HISTORY BODY */}
+              {showHistory && (
+                <div
+                  className="space-y-2 border-l pl-3"
+                  style={{ borderColor: "rgba(255,255,255,0.08)" }}
+                >
+                  {history.map((h) => {
+                    const changes = JSON.parse(h.changes || "{}");
 
-                  return (
-                    <div key={h.id} className="relative text-xs">
-                      {/* Dot */}
-                      <div
-                        className="absolute -left-[7px] top-1 w-2 h-2 rounded-full"
-                        style={{ background: "#6366f1" }}
-                      />
-
-                      <div className="bg-black/20 rounded-md p-2">
-                        {/* Action */}
+                    return (
+                      <div key={h.id} className="relative text-xs">
                         <div
-                          className="font-medium text-[11px]"
-                          style={{ color: "var(--text-primary)" }}
-                        >
-                          {h.action === "UPDATED"
-                            ? "Task updated"
-                            : h.action === "COMMENT_ADDED"
-                              ? "Comment added"
-                              : h.action}
-                        </div>
+                          className="absolute -left-[7px] top-1 w-2 h-2 rounded-full"
+                          style={{ background: "#6366f1" }}
+                        />
 
-                        {/* Changes */}
-                        <div className="mt-1 space-y-1">
-                          {Object.entries(changes).map(([key, value]: any) => (
-                            <div key={key} className="text-[10px]">
-                              <span style={{ color: "var(--text-muted)" }}>
-                                {key}:
-                              </span>{" "}
-                              <span style={{ color: "#ef4444" }}>
-                                {String(value.old)}
-                              </span>{" "}
-                              →{" "}
-                              <span style={{ color: "#10b981" }}>
-                                {String(value.new)}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
+                        <div className="bg-black/20 rounded-md p-2">
+                          <div className="font-medium text-[11px]">
+                            {h.action}
+                          </div>
 
-                        {/* Timestamp */}
-                        <div className="text-[10px] mt-1 opacity-60">
-                          {format(new Date(h.createdAt), "MMM d, HH:mm")}
+                          {/* ✅ FIXED COMMENT_UPDATED UI */}
+                          <div className="mt-1 space-y-1">
+                            {h.action === "COMMENT_UPDATED" ? (
+                              <>
+                                <div className="text-[10px]">
+                                  💬{" "}
+                                  <span style={{ color: "#10b981" }}>
+                                    "{changes.message}"
+                                  </span>
+                                </div>
+
+                                <div className="text-[10px]">
+                                  <span style={{ color: "var(--text-muted)" }}>
+                                    status:
+                                  </span>{" "}
+                                  <span style={{ color: "#ef4444" }}>
+                                    {changes.status?.old}
+                                  </span>{" "}
+                                  →{" "}
+                                  <span style={{ color: "#10b981" }}>
+                                    {changes.status?.new}
+                                  </span>
+                                </div>
+                              </>
+                            ) : h.action === "COMMENT_ADDED" ? (
+                              <>
+                                <div className="text-[10px]">
+                                  💬 {changes.message}
+                                </div>
+                                <div className="text-[10px]">
+                                  status: {changes.status}
+                                </div>
+                              </>
+                            ) : (
+                              Object.entries(changes).map(
+                                ([key, value]: any) => (
+                                  <div key={key} className="text-[10px]">
+                                    {key}: {value?.old} → {value?.new}
+                                  </div>
+                                ),
+                              )
+                            )}
+                          </div>
+
+                          <div className="text-[10px] mt-1 opacity-60">
+                            {format(new Date(h.createdAt), "MMM d, HH:mm")}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           )}
 

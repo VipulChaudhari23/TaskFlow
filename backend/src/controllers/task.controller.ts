@@ -168,7 +168,7 @@ export const updateTask = async (
       res.status(403).json({ message: "Access denied" });
       return;
     }
-    const changes: Record<string, { old: unknown; new: unknown }> = {};
+    const changes: any = {};
     const fields = [
       "title",
       "description",
@@ -176,9 +176,8 @@ export const updateTask = async (
       "priority",
       "progress",
       "dueDate",
-    ] as const;
-    type TaskUpdateField = (typeof fields)[number];
-    fields.forEach((key: TaskUpdateField) => {
+    ];
+    fields.forEach((key) => {
       if (req.body[key] !== undefined) {
         let newValue = req.body[key];
         if (key === "dueDate" && newValue) newValue = new Date(newValue);
